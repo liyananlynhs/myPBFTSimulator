@@ -40,6 +40,10 @@ public class Simulator {
             }
         }
         System.out.println(clis[0].voteTable);
+        //看一下投票信任度列表
+        System.out.println("-------投票信任度列表-------");
+        for(Double d : reps[0].crVotes)
+            System.out.println(d);
     }
 
     public static void sendMsg(Message msg) {
