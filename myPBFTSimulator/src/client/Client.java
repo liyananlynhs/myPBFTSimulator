@@ -67,5 +67,8 @@ public class Client {
        
     }
     
-    
+    //发送Request消息
+    public void sendRequest(int primaryIndex) {
+
+    }
 }
