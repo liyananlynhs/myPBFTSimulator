@@ -5,6 +5,7 @@ public class RequestMsg extends Message{
     public RequestMsg(int sendId, int recId, long rcvTime){
         super(sendId, recId, rcvTime);
         this.c = sendId;
+        this.type = Message.REQUEST;
     }
 
     public boolean equals(Object obj) {

@@ -1,8 +1,10 @@
 package message;
 
 public class ReplyMsg extends Message{
+    public int c;
     public ReplyMsg(int sendId, int rcvId, long rcvTime) {
         super(sendId, rcvId, rcvTime);
+        this.type = Message.REPLY;
     }
     public boolean equals(Object obj) {
         if (obj instanceof ReplyMsg) {

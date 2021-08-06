@@ -27,12 +27,16 @@ public class Simulator {
             clis[i] = new Client(i);
         }
 
-        clis[0].sendVoteRequest(0);
+        //clis[0].sendVoteRequest(0);
+        clis[0].sendRequest(0);
 
         while(!msgQue.isEmpty()) {
             Message msg = msgQue.poll();
             switch (msg.type) {
                 case Message.VOTEREPLY:		//发给客户端
+                    clis[msg.rcvId].msgProcess(msg);
+                    break;
+                case Message.REPLY:        //发给客户端
                     clis[msg.rcvId].msgProcess(msg);
                     break;
                 default:

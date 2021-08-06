@@ -5,6 +5,7 @@ import message.Message;
 import message.VoteReplyMsg;
 import message.VoteRequestMsg;
 import message.VoteResultMsg;
+import message.RequestMsg;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,6 +33,9 @@ public class Client {
         switch(msg.type) {
             case Message.VOTEREPLY:
                 receiveVoteReply(msg);
+                break;
+            case Message.REPLY:
+                receiveReply(msg);
                 break;
             default:
                 System.out.println("【Error】消息类型错误！");
@@ -69,6 +73,11 @@ public class Client {
     
     //发送Request消息
     public void sendRequest(int primaryIndex) {
+        RequestMsg requestMsg = new RequestMsg(id, primaryIndex, 0);
+        Simulator.sendMsg(requestMsg);
+    }
 
+    public void receiveReply(Message msg) {
+        System.out.println("客户端:" + id + "收到Reply，来自:" + msg.sndId);
     }
 }

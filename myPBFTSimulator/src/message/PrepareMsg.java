@@ -1,8 +1,10 @@
 package message;
 
 public class PrepareMsg extends Message{
+    public int c;
     public PrepareMsg(int sendId, int rcvId, long rcvTime) {
         super(sendId, rcvId, rcvTime);
+        this.type = Message.PREPARE;
     }
     public Message copy(int rcvId, long rcvtime) {
         return new PrepareMsg(sndId, rcvId, rcvtime);

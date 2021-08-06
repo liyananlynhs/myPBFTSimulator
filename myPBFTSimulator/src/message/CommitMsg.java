@@ -1,8 +1,10 @@
 package message;
 
 public class CommitMsg extends Message{
+    public int c;
     public CommitMsg(int sendId, int rcvId, long rcvTime){
         super(sendId, rcvId, rcvTime);
+        this.type = Message.COMMIT;
     }
     public Message copy(int rcvId, long rcvtime) {
         return new CommitMsg(sndId, rcvId, rcvtime);

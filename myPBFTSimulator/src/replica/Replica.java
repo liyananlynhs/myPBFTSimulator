@@ -17,6 +17,7 @@ public class Replica {
     public Double[] crBeh = new Double[Simulator.RN];
     public Double[] crAcc = new Double[Simulator.RN];
     public Double[] crPro = new Double[Simulator.RN];
+    int rcvCommitNum = 0;
 
     //消息缓存
     public Map<Integer, Set<Message>> msgCache;
@@ -40,6 +41,15 @@ public class Replica {
                 break;
             case Message.VOTERESULT:
                 receiveVoteResult(msg);
+                break;
+            case Message.REQUEST:
+                receiveRequest(msg);
+                break;
+            case Message.PREPARE:
+                receivePrepare(msg);
+                break;
+            case Message.COMMIT:
+                receiveCommit(msg);
                 break;
             default:
                 System.out.println("消息类型错误!");
@@ -84,11 +94,41 @@ public class Replica {
             return;
         VoteResultMsg voteResultMsg = (VoteResultMsg) msg;
         this.voteTable.putAll(voteResultMsg.voteTable);
-     // 更新本节点的投票信任度列表
+        // 更新本节点的投票信任度列表
         for(Map.Entry entry : voteTable.entrySet()) {
             int k = (Integer)entry.getKey();
             int v = (Integer)entry.getValue();
             crVotes[k] = v / (double)Simulator.RN;
+        }
+    }
+
+    public void receiveRequest(Message msg) {
+        if(msg == null)
+            return;
+        RequestMsg requestMsg = (RequestMsg) msg;
+        PrepareMsg prepareMsg = new PrepareMsg(id, id, 0);
+        prepareMsg.c = requestMsg.c;
+        Simulator.sendMsgToOthers(prepareMsg);
+    }
+
+    public void receivePrepare(Message msg) {
+        if(msg == null)
+            return;
+        PrepareMsg prepareMsg = (PrepareMsg) msg;
+        CommitMsg commitMsg = new CommitMsg(id, id, 0);
+        commitMsg.c = prepareMsg.c;
+        Simulator.sendMsgToOthers(commitMsg);
+    }
+
+    public void receiveCommit(Message msg) {
+        if(msg == null)
+            return;
+        CommitMsg commitMsg = (CommitMsg) msg;
+        rcvCommitNum++;
+        if(rcvCommitNum >= (Simulator.RN + 1)/2) {
+            ReplyMsg replyMsg = new ReplyMsg(id, commitMsg.c, 0);
+            replyMsg.c = commitMsg.c;
+            Simulator.sendMsg(replyMsg);
         }
     }
 }
